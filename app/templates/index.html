@@ -1,0 +1,53 @@
+<!-- 
+  @Author: Sam Zhang
+  @Date:   2020-04-14 11:11:22
+  @Last Modified by:   Sam Zhang
+  @Last Modified time: 2020-04-14 11:33:23
+-->
+
+{% extends 'base.html' %}
+
+{% block title %}首页{% endblock %}
+
+{% block top %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <nav class="nav nav-pills flex-column flex-sm-row" id="pills-tab" role="tablist" style="margin-top: 3%;">
+            <a class="flex-sm-fill text-sm-center nav-link active" id="baidu-tab" data-toggle="pill" href="#pills-baidu" role="tab" aria-controls="baidu" aria-selected="true">百度版</a>
+            <a class="flex-sm-fill text-sm-center nav-link" id="google-tab" data-toggle="pill" href="#pills-google" role="tab" aria-controls="google" aria-selected="false">Google版</a>
+        </nav>
+    </div>
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-baidu" role="tabpanel" aria-labelledby="pills-baidu-tab">
+            <a onclick="changeTheme()" href="" class="float-right" style="margin-right: 10%;" title="换肤"><i class="fa fa-adjust"></i></a>
+            <div class="container">
+                <h1 class="display-4 text-center m-5">
+                    广度搜索 <small><small><small class="font-italic font-weight-light text-primary">V1.0</small></small></small>
+                    <small><small><small><small><p></p><p class="font-italic text-center text-primary">百度版</p></small></small></small></small>
+                </h1>
+                <form method="post" action="{{ url_for('baidu.index') }}">
+                    <div class="input-group input-group-lg">
+                        <input class="form-control form-control-lg rounded-0" name="query" type="search" autocomplete="off">
+                        <button class="btn btn-outline-primary rounded-0" type="submit">广度搜索</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="pills-google" role="tabpanel" aria-labelledby="pills-google-tab">
+            <a onclick="changeTheme()" href="" class="float-right" style="margin-right: 10%;" title="换肤"><i class="fa fa-adjust"></i></a>
+            <div class="container">
+                <h1 class="display-4 text-center m-5">
+                    广度搜索 <small><small><small class="font-italic font-weight-light text-primary">V1.0</small></small></small>
+                    <small><small><small><small><p></p><p class="font-italic text-center text-warning">Google版</p></small></small></small></small>
+                </h1>
+                <form method="post" action="{{ url_for('google.index') }}">
+                    <div class="input-group input-group-lg">
+                        <input class="form-control form-control-lg rounded-0" name="query" type="search" autocomplete="off">
+                        <button class="btn btn-outline-primary rounded-0" type="submit">广度搜索</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

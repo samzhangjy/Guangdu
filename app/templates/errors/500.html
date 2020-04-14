@@ -1,0 +1,30 @@
+<!-- 
+  @Author: Sam Zhang
+  @Date:   2020-04-14 12:11:57
+  @Last Modified by:   Sam Zhang
+  @Last Modified time: 2020-04-14 12:13:16
+-->
+
+{% extends 'base.html' %}
+
+{% block title %}500{% endblock %}
+
+{% block top %}{% endblock %}
+
+{% block content %}
+    <div class="bg-primary" style="height: 100%; width: 100%; position: absolute">
+    <div class="container">
+        <div class="jumbotron text-center">
+            <h1 class="display-4">500</h1>
+            <p class="lead">服务器出错了</p>
+            <hr class="my-4">
+            <p>这个页面有一个bug，攻城狮正在紧张地修复中</p>
+            <a class="btn btn-primary btn-lg" href="/" role="button">回到首页</a>
+        </div>
+        <footer class="text-light fixed-bottom container text-center">
+            <hr class="border-light">
+            <p>&copy; 2020 广度搜索</p>
+        </footer>
+    </div>
+    </div>
+{% endblock %}

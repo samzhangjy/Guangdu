@@ -1,0 +1,70 @@
+<!-- 
+  @Author: Sam Zhang
+  @Date:   2020-04-10 20:05:53
+  @Last Modified by:   Sam Zhang
+  @Last Modified time: 2020-04-14 18:03:30
+-->
+
+{% extends 'base.html' %}
+
+{% block title %}{{ keyword }}{% endblock %}
+
+{% block top %}{% endblock %}
+
+{% block content %}
+    <script>
+        function change(pn) {
+            this.parent.location.href = "{{ url_for('google.search') }}?q={{ keyword }}&page=" + pn;
+        }
+    </script>
+    {% if results %}
+    {% for result in results %}
+        {% if result.title and result.link %}
+            <div class="container">
+                <h5 id="{{ loop.index }}h5"><a href="{{ result.link }}" target="_blank">{{ result.title }}</a></h5>
+                {% if result.time %}<p class="d-inline text-muted">{{ result.time }} &middot; </p>{% endif %}<p class="d-inline text-secondary" id="{{ loop.index }}">{% if result.des %}{{ result.des }}{% else %}暂无描述{% endif %}</p>
+                <hr>
+            </div>
+        {% endif %}
+    {% endfor %}
+    {% else %}
+        <div class="container">
+            <p>关键词 {{ keyword }} 没有找到搜索结果</p>
+        </div>
+    {% endif %}
+    <div class="container">
+        <nav>
+            <ul class="pagination justify-content-center">
+                {% if cur != 1 and cur != 10 %}
+                    {% set url = "javascript:change(pn='" + (cur - 3) | string + "')" %}
+                {% else %}
+                    {% set url = '#' %}
+                {% endif %}
+                <li class="page-item{% if cur == 2 %} disabled{% endif %}">
+                    <a class="page-link" href="{{ url }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% if pages | length <= 10 %}
+                    {% for i in pages %}
+                        <li class="page-item{% if i == cur - 1 %} active{% endif %}"><a class="page-link" href="javascript:change(pn='{{ i - 1 }}')">{{ i }}</a></li>
+                    {% endfor %}
+                {% endif %}
+                {% if cur < pages | length %}
+                    {% set url = "javascript:change(pn='" + (cur - 1) | string + "')" %}
+                {% else %}
+                    {% set url = '#' %}
+                {% endif %}
+                <li class="page-item{% if cur == 11 or cur == pages | length + 1 %} disabled{% endif %}"{% if cur == 11 %} data-toggle="tooltip" data-placement="top" title="由于性能原因，广度搜索目前仅提供前10页的搜索结果"{% endif %}>
+                    <a class="page-link" href="{{ url }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <footer>
+            <hr>
+            <p class="text-muted">&copy; 2020 广度搜索 保留所有权利 | 部分搜索结果来自<a href="https://www.google.com">Google</a><br><a href="/docs/" target="_blank">文档</a> &middot; <a href="/about/" target="_blank">关于</a> &middot; <a href="https://github.com/samzhangjy/guangdu" target="_blank">GitHub</a></p></p>
+        </footer>
+    </div>
+{% endblock %}

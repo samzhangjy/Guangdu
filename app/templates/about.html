@@ -1,0 +1,61 @@
+<!-- 
+  @Author: Sam Zhang
+  @Date:   2020-04-10 20:05:53
+  @Last Modified by:   Sam Zhang
+  @Last Modified time: 2020-04-14 18:03:01
+-->
+
+{% extends 'base.html' %}
+
+{% block title %}关于{% endblock %}
+
+{% block top %}{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    ul.nav-pills {
+        top: 20px;
+        position: fixed;
+    }
+
+    div.col-8 div {
+        height: 100vh;
+    }
+</style>
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <a class="navbar-brand" href="/">广度搜索 <small class="text-primary">帮助中心</small></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/docs/">文档</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://github.com/samzhangjy/guangdu" target="_blank">GitHub</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/about/">关于</a>
+            </li>
+        </ul>
+    </div>
+    <a onclick="changeTheme()" href="" title="换肤"><i class="fa fa-adjust"></i></a>
+</nav>
+
+<div class="container" style="margin-top: 80px;">
+    <h1>关于</h1>
+    <hr>
+    <p>
+        广度搜索是一个开源的，非商业的搜索引擎。它并非自己产生搜索结果，而是间接地从百度或Google中爬取无广告的搜索结果。<br><br>
+        广度搜索的使命是让搜索变得更快捷，简单，而不是从广告中寻找资料。从这个初衷开始，广度搜索就一直在往这个目标前进，努力追寻实用性与快捷性之间的平衡点。如果您会使用Python，也欢迎加入这个项目的开发，使广度向目标更进一步！
+    </p>
+</div>
+{% endblock %}

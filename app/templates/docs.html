@@ -1,0 +1,208 @@
+<!-- 
+  @Author: Sam Zhang
+  @Date:   2020-04-10 20:05:53
+  @Last Modified by:   Sam Zhang
+  @Last Modified time: 2020-04-14 19:55:35
+-->
+
+{% extends 'base.html' %}
+
+{% block title %}文档{% endblock %}
+
+{% block top %}{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    ul.nav-pills {
+        top: 20px;
+        position: fixed;
+    }
+
+    div.col-8 div {
+        height: 100vh;
+    }
+</style>
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <a class="navbar-brand" href="/">广度搜索 <small class="text-primary">帮助中心</small></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/docs/">文档</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://github.com/samzhangjy/guangdu" target="_blank">GitHub</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/about/">关于</a>
+            </li>
+        </ul>
+    </div>
+    <a onclick="changeTheme()" href="" title="换肤"><i class="fa fa-adjust"></i></a>
+</nav>
+
+<div class="row">
+    <div class="col-2">
+        <nav id="navbar" class="navbar navbar-light bg-light flex-column position-fixed" style="margin-top: 80px;">
+            {% set cookie = request.cookies.get('theme') %}
+            {% if not cookie %} {% set cookie = 'light' %} {% endif %}
+            <a class="navbar-brand" {% if cookie == 'dark' %} style="color: black !important;" {% endif %}
+                href="#">目录</a>
+            <nav class="nav nav-pills flex-column">
+                <a class="nav-link" href="#usage">使用说明</a>
+                <nav class="nav nav-pills flex-column">
+                    <a class="nav-link ml-3 my-1" href="#get-code">获取源码</a>
+                    <a class="nav-link ml-3 my-1" href="#keep-dev">继续开发</a>
+                </nav>
+                <a class="nav-link" href="#api">API</a>
+                <nav class="nav nav-pills flex-column">
+                    <a class="nav-link ml-3 my-1" href="#api-summary">概述</a>
+                    <a class="nav-link ml-3 my-1" href="#api-attr">参数</a>
+                    <a class="nav-link ml-3 my-1" href="#api-errors">错误</a>
+                </nav>
+            </nav>
+        </nav>
+    </div>
+    <div class="col-10" style="margin-top: 80px; padding-right: 100px">
+        <div style="position: relative;" style="margin-top: 80px;">
+            <h1>文档</h1>
+            <br id="usage">
+            <hr><br>
+            <h4>使用说明</h4>
+            <p>
+                <a href="/">广度搜索</a>是一个用爬虫来爬取搜索引擎数据的网站，它自己并不生成搜索结果。目前为止，广度搜索可以爬取<a href="https://www.baidu.com"
+                    target="_blank">百度</a>和<a href="https://www.google.com"
+                    target="_blank">Google</a>。广度搜索在爬取时已经将百度搜索的广告全部过滤完毕，所以不会有任何在搜索结果中的广告。在访问Google版时，不用连接VPN。它基于Python的BeautifulSoup包，网页使用Python的轻量级框架Flask，而前端则使用Bootstrap4。
+            </p>
+            <br id="get-code">
+            <hr><br>
+            <h5>获取源码</h5>
+            <p>
+                广度搜索是开源的，基于MIT版权协议。你可以从<a href="https://github.com/samzhangjy/guangdu"
+                    target="_blank">GitHub</a>上获取源代码，或直接clone（请确保你安装了Git）：
+            </p>
+            <pre>git clone https://github.com/samzhangjy/guangdu.git</pre>
+            <p>当然，我也十分欢迎你star或fork！:-)</p>
+            <br id="keep-dev">
+            <hr><br>
+            <h5>继续开发</h5>
+            <p>
+                如果你想继续开发这个爬虫，可以先将它克隆到本地，然后开发你的新功能。如果你无法访问Google但是想开发它的其他功能，不要紧，源码中带有一份Google的源代码，搜索词是hello，是第一页。如果你想使用它，注释掉app/utils.py中google_search函数中的一部分代码，跟着里面的注释操作就行。如果你开发出了好玩的新功能，也欢迎到GitHub上面提交PR！当然，如果你发现了程序中的bug，我十分欢迎你到GitHub上提出新的issue，但请在issue中说明以下几点：
+                <li>遇到的bug/故障</li>
+                <li>出现bug的页面</li>
+                <li>你使用的包（如果跟requirements.txt中的一样，可以省略）</li>
+                <li>你的浏览器及操作系统（如果是前端问题）</li>
+                <li>你对代码的更改</li>
+                <li>你认为可能的出错原因</li>
+            </p>
+            <br id="api">
+            <hr><br>
+            <h4>API</h4>
+            <p>
+                如果你不想再去爬取百度或Google了，广度搜索也提供更便捷的方法 -
+                API。它将以json格式返回搜索结果与其他信息，而不用你再去管别的了。它的使用方法很简单，你现在就可以试一下：新建一个标签页，输入guangso.herokuapp.com/api/baidu/?q=Easy，然后就会返回与Easy有关的搜索结果，来源是百度。下面是第一页的返回信息：
+            </p>
+            <pre>
+                {
+                    "keyword": "Easy", 
+                    "message": "Success", 
+                    "pages": 10, 
+                    "results": [
+                      {
+                        "des": null, 
+                        "link": "http://www.baidu.com/link?url=_-T-KwkF-rfSXKqOLW2UHiHXrLrglKsKUOgh9OKaTml2DoZJgw-ReCq8BHQXATP5cEeHLNXbCk7YumlKxIbSEq", 
+                        "title": "    easy      _\u767e\u5ea6\u7ffb\u8bd1  "
+                      }, 
+                      {
+                        "des": null, 
+                        "link": "http://www.baidu.com/link?url=forAaXYofrNCEXNoiZzaSWooUchVOp4actellNk5R8-JbqGg5znDIjOnc7zU8WNblHHQkojAmg06CS1Pspnhroimw9ABSPsz3DH8Iczx6uG", 
+                        "title": "    Easy      \u7684\u6700\u65b0\u76f8\u5173\u4fe1\u606f  "
+                      }, 
+                      {
+                        "des": "     Easy        ,\u77e5\u540d\u4e92\u8054\u7f51\u8d44\u8baf\u535a\u4e3b \u5fae\u535a\u7b7e\u7ea6\u81ea\u5a92\u4f53\u3002         Easy        \u7684\u5fae\u535a\u4e3b\u9875\u3001\u4e2a\u4eba\u8d44\u6599\u3001\u76f8\u518c\u3002\u65b0\u6d6a\u5fae\u535a,\u968f\u65f6\u968f\u5730\u5206\u4eab\u8eab\u8fb9\u7684\u65b0\u9c9c\u4e8b\u513f\u3002   ", 
+                        "link": "http://www.baidu.com/link?url=4CSyLTvECRVc-dk4SSSa0uk2SnvYsjQb9avZDviT15W", 
+                        "title": "    Easy      \u7684\u5fae\u535a_\u5fae\u535a  "
+                      }, 
+                      {
+                        "des": "    Directed by Will Gluck. With Emma Stone, Amanda Bynes, Penn Badgley, Dan Byrd. A clean-cut high school student relies on the school's rumor mill to...   ", 
+                        "link": "http://www.baidu.com/link?url=dh87XeQUSkZL3n3gCokaAqbnARWUDBEcsCcuS1s9PwyU7iHrRMXIO5fxNJoz73C6", 
+                        "title": "    Easy      A (2010) - IMDb  "
+                      }, 
+                      {
+                        "des": "    Directed by Will Gluck. With Emma Stone, Amanda Bynes, Penn Badgley, Dan Byrd. A clean-cut high school student relies on the school's rumor mill to...   ", 
+                        "link": null, 
+                        "title": ""
+                      }, 
+                      {
+                        "des": "  \u6d77\u8bcd\u8bcd\u5178,\u6700\u6743\u5a01\u7684\u5b66\u4e60\u8bcd\u5178,\u4e3a\u60a8\u63d0\u4f9b     easy    \u7684\u5728\u7ebf\u7ffb\u8bd1,     easy    \u662f\u4ec0\u4e48\u610f\u601d,     easy    \u7684\u771f\u4eba\u53d1\u97f3,\u6743\u5a01\u7528\u6cd5\u548c\u7cbe\u9009\u4f8b\u53e5\u7b49\u3002 ", 
+                        "link": "http://www.baidu.com/link?url=RJWQGxq-wZKJXwHBr6pKPTEMTfRP9XNuOo_-bqAk873", 
+                        "title": "    easy      \u662f\u4ec0\u4e48\u610f\u601d_       easy      \u5728\u7ebf\u7ffb\u8bd1_\u82f1\u8bed_\u8bfb\u97f3_\u7528\u6cd5_\u4f8b\u53e5_\u6d77\u8bcd\u8bcd\u5178  "
+                      }, 
+                      {
+                        "des": "   easy    Group is the private investment vehicle of Stelios and the creator and owner of the     easy    family of brands. Keep up with all the brands here. ", 
+                        "link": "http://www.baidu.com/link?url=AnBGpHHwBbljLIe7gfJB4u5QCjn_wsOZJjIUg6jagti", 
+                        "title": "    easy      .com - the       easy      Group portal for the       easy      family of brands  "
+                      }, 
+                      {
+                        "des": "  Pay     Easy    \u5168\u570b\u6700\u5927\u4f01\u696d\u798f\u5229\u7db2,\u798f\u59d4\u6703\u6700\u4f73\u5e6b\u624b:\u63d0\u4f9b\u570b\u5167\u5916\u8a02\u623f\u3001\u5bb6\u96fb\u30013C\u3001\u79ae\u5238\u3001\u65c5\u904a\u3001\u5c45\u5bb6\u3001\u842c\u5bb6\u7279\u7d04\u5546\u5e97,\u3010\u52a0\u5165\u5e78\u798f\u4f01\u696d\u884c\u5217\u2027\u798f\u5229\u4e00\u6b21\u5230\u4f4d\u3011\u8f15\u9b06\u4eab\u6709\u5168\u65b9\u4f4d\u54e1\u5de5\u798f\u5229 ", 
+                        "link": "http://www.baidu.com/link?url=B6MCn_h91TFkqdp1cmVqsSxXAG3UXNeiinpLU3CGNKl1Priqwu1pcXjFRNB_rc6Q", 
+                        "title": "   Pay       Easy      |\u5168\u570b\u6700\u5927\u4f01\u696d\u798f\u5229\u7db2  "
+                      }, 
+                      {
+                        "des": "  Pay     Easy    \u5168\u570b\u6700\u5927\u4f01\u696d\u798f\u5229\u7db2,\u798f\u59d4\u6703\u6700\u4f73\u5e6b\u624b:\u63d0\u4f9b\u570b\u5167\u5916\u8a02\u623f\u3001\u5bb6\u96fb\u30013C\u3001\u79ae\u5238\u3001\u65c5\u904a\u3001\u5c45\u5bb6\u3001\u842c\u5bb6\u7279\u7d04\u5546\u5e97,\u3010\u52a0\u5165\u5e78\u798f\u4f01\u696d\u884c\u5217\u2027\u798f\u5229\u4e00\u6b21\u5230\u4f4d\u3011\u8f15\u9b06\u4eab\u6709\u5168\u65b9\u4f4d\u54e1\u5de5\u798f\u5229 ", 
+                        "link": "http://www.baidu.com/link?url=_-T-KwkF-rfSXKqOLW2UHfeGB-G5MHcGNAMcR901e_Hq08lITd3j2UlZ8fxCV_H2fvUX7xmy9Gh94tNmGmBRz76zUzrJuszVFucpFIh5Eta", 
+                        "title": "    easy      \u5728\u7ebf\u8bd5\u542c_\u9ad8\u97f3\u8d28\u6b4c\u66f2_\u7f51\u6613\u4e91\u97f3\u4e50  "
+                      }, 
+                      {
+                        "des": "  That's     easy    for you to say... \u4f60\u8bf4\u8d77\u6765\u8f7b\u677e\u3002 It was all too     easy    to believe it. \u8fd9\u592a\u5bb9\u6613\u4ee4\u4eba\u76f8\u4fe1\u4e86\u3002 5  ADJ-GRADED \u597d\u542c\u7684;\u60a6\u8033\u7684/\u597d\u770b\u7684;\u60a6\u76ee... ", 
+                        "link": "http://www.baidu.com/link?url=QdAs_ne5-T4C_Qgc5IO3QwM6uc2hKMl3axmjAA3TRrODfu4IcBchGOd9-HqCKL8n", 
+                        "title": "    easy      \u662f\u4ec0\u4e48\u610f\u601d_       easy      \u7684\u7ffb\u8bd1_\u97f3\u6807_\u8bfb\u97f3_\u7528\u6cd5_\u4f8b\u53e5_\u7231\u8bcd\u9738\u5728\u7ebf\u8bcd\u5178  "
+                      }
+                    ], 
+                    "status": "200"
+                }
+                </pre>
+            <br id="api-summary">
+            <hr><br>
+            <h5>概述</h5>
+            <p>
+                上面信息的第一个参数<code>keyword</code>表示的是从URL中提取出来的搜索词，即<code>?q=Easy</code>的<code>Easy</code>部分；第二个参数<code>message</code>则是搜索完成后程序返回的状态信息，可以帮助人们来查看当前状态；第三个参数<code>pages</code>表示的是全部的页码，最大为10；第四个参数<code>results</code>内部是许多个子json，其中<code>des</code>表示搜索引擎提供的该网站的概述，<code>link</code>表示该网站的链接，而<code>title</code>就是网站的标题；最后一个参数<code>status</code>代表当前的状态码，与<code>message</code>参数相呼应。
+            </p>
+            <br id="api-attr">
+            <hr><br>
+            <h5>参数</h5>
+            <p>
+                广度搜索的api不仅提供百度版，也同样提供Google版，使用方法与百度差不多：
+                <pre>guangso.herokuapp.com/api/google/?q=搜索词</pre>
+                它返回的信息的基本格式与百度是一样的，这里就不再解释了。之后的URL示例也将用百度做演示，Google版也是一样的操作。
+                <br>
+                如果想要获取指定页码的搜索结果，可以定义<code>page</code>参数：
+                <pre><br>guangso.herokuapp.com/api/baidu/?q=搜索词&page=2</pre>
+                像上面的URL就将返回第3页的搜索结果，而不是第2页。因为广度搜索的页码是从0开始计算的，所以使用时需要减1。<br>
+                由于目前服务器性能原因，目前广度搜索仅提供前10页的搜索结果，如需更多请自行使用代码获取。
+            </p>
+            <br id="api-errors">
+            <hr><br>
+            <h5>错误</h5>
+            <p>
+                当请求无效时，或服务器出错时，api都会以json格式返回错误信息。这些错误信息通常包含参数<code>status</code>和<code>message</code>，有些也包含其他参数。这些错误蛮多的，我就不在此一一列举了，可以自行查看源代码。
+            </p>
+        </div>
+    </div>
+</div>
+<script>
+    $('body').scrollspy({
+        target: '#navbar',
+        offset: 100
+    })
+</script>
+{% endblock %}

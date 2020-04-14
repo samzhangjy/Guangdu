@@ -1,0 +1,30 @@
+<!-- 
+  @Author: Sam Zhang
+  @Date:   2020-04-10 20:05:45
+  @Last Modified by:   Sam Zhang
+  @Last Modified time: 2020-04-14 11:32:28
+-->
+
+{% extends 'base.html' %}
+
+{% block title %}Google版{% endblock %}
+
+{% block top %}{% endblock %}
+
+{% block content %}
+    <a onclick="changeTheme()" href="" class="float-right" style="margin-right: 10%;" title="换肤"><i class="fa fa-adjust"></i></a>
+    <div class="container">
+        <h1 class="display-4 text-center m-5">
+            广度搜索 <small><small><small class="font-italic font-weight-bold text-primary">V1.0</small></small></small>
+            <small><small><small><small><p></p><p class="font-italic text-center text-warning">Google 版</p></small></small></small></small>
+        </h1>
+        <form method="post">
+            <div class="input-group input-group-lg">
+                <input class="form-control form-control-lg rounded-0" name="query" type="search" autocomplete="off">
+                <button class="btn btn-outline-primary rounded-0" type="submit">广度搜索</button>
+            </div>
+        </form>
+        <hr>
+        <p class="text-center">广度搜索也提供<a href="{{ url_for('baidu.index') }}">百度版</a> | <a href="/">返回首页</a></p>
+    </div>
+{% endblock %}
