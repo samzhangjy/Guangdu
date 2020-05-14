@@ -2,7 +2,7 @@
   @Author: Sam Zhang
   @Date:   2020-04-10 20:05:53
   @Last Modified by:   Sam Zhang
-  @Last Modified time: 2020-04-14 20:03:29
+  @Last Modified time: 2020-05-06 16:45:24
 -->
 
 {% extends 'base.html' %}
@@ -21,6 +21,22 @@
     {% for result in results %}
         {% if result.title and result.link %}
             <div class="container">
+                {% if result.domain %}
+                    <p class="text-success">
+                        {{ result.domain }}
+                        {% if result.path %}
+                            &rsaquo;
+                            {% for loc in result.path %}
+                                {% if loop.index != result.path | length %}
+                                    {{ loc }}
+                                    &rsaquo;
+                                {% else %}
+                                    {{ loc }}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </p>
+                {% endif %}
                 <h5 id="{{ loop.index }}h5"><a href="{{ result.link }}" target="_blank">{{ result.title }}</a></h5>
                 {% if result.time %}<p class="d-inline text-muted">{{ result.time }} &middot; </p>{% endif %}<p class="d-inline text-secondary" id="{{ loop.index }}">{% if result.des %}{{ result.des }}{% else %}暂无描述{% endif %}</p>
                 <hr>
@@ -65,6 +81,7 @@
         <footer class="text-center">
             <hr>
             <p class="text-muted">&copy; 2020 广度搜索 保留所有权利 | 部分搜索结果来自<a href="https://www.google.com">Google</a><br><a href="/docs/" target="_blank">文档</a> &middot; <a href="/about/" target="_blank">关于</a> &middot; <a href="https://github.com/samzhangjy/guangdu" target="_blank">GitHub</a></p></p>
+            <p>当前呈现版本：V{{ env.get() }}</p>
         </footer>
     </div>
 {% endblock %}

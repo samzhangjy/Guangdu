@@ -2,7 +2,7 @@
   @Author: Sam Zhang
   @Date:   2020-04-10 20:05:53
   @Last Modified by:   Sam Zhang
-  @Last Modified time: 2020-04-14 18:02:38
+  @Last Modified time: 2020-05-06 17:26:20
 -->
 
 {% extends 'base.html' %}
@@ -12,17 +12,54 @@
 {% block top %}{% endblock %}
 
 {% block content %}
+    <style>
+        
+    </style>
     <script>
         function change(pn) {
             this.parent.location.href = "{{ url_for('baidu.search') }}?q={{ keyword }}&page=" + pn;
         }
     </script>
+    {% if pre_results %}
+    <div class="container">
+        {% if pre_results[0].type == 'total' %}
+        <small class="text-muted">广度共找到搜索结果约{{ pre_results[0].result }}个</small>
+        <br><br>
+        {% endif %}
+        {% for result in pre_results %}
+        {% if result.type == 'calc' %}
+        <div class="container bg-light p-3 pl-4 pr-4 text-dark">
+            <h4>{{ result.process }}</h4>
+            <p>{{ result.result }}</p>
+            <small class="align-text-bottom">广度计算</small>
+        </div>
+        <hr>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
     {% if results %}
     {% for result in results %}
         {% if result.title and result.link %}
             <div class="container">
+                {% if result.domain %}
+                    <p class="text-success">
+                        {{ result.domain }}
+                        {% if result.path %}
+                            &rsaquo;
+                            {% for loc in result.path %}
+                                {% if loop.index != result.path | length %}
+                                    {{ loc }}
+                                    &rsaquo;
+                                {% else %}
+                                    {{ loc }}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </p>
+                {% endif %}
                 <h5 id="{{ loop.index }}h5"><a href="{{ result.link }}" target="_blank">{{ result.title }}</a></h5>
-                {% if result.time %}<p class="d-inline text-muted">{{ result.time }} &middot; </p>{% endif %}<p class="d-inline text-secondary" id="{{ loop.index }}">{% if result.des %}{{ result.des }}{% else %}暂无描述{% endif %}</p>
+                {% if result.time %}<p class="d-inline text-muted">{{ result.time }} &middot; </p>{% endif %}<p class="d-inline text-secondary text-wrap" id="{{ loop.index }}">{% if result.des %}{{ result.des }}{% else %}暂无描述{% endif %}</p>
                 <hr>
             </div>
         {% endif %}
@@ -33,6 +70,19 @@
         </div>
     {% endif %}
     <div class="container">
+        {% for _ in pre_results %}
+        {% if _.type == 'related' %}
+        <h5>相关搜索</h5>
+        <div class="row">
+        {% for result in _.results %}
+            <div class="col-4 mb-2">
+                <a href="{{ result.url }}" class="mb-3" target="_parent">{{ result.text }}</a><br>
+            </div>
+        {% endfor %}
+        </div>
+        <br>
+        {% endif %}
+        {% endfor %}
         <nav>
             <ul class="pagination justify-content-center">
                 {% if cur != 0 and cur != 10 %}
@@ -65,6 +115,7 @@
         <footer class="text-center">
             <hr>
             <p class="text-muted">&copy; 2020 广度搜索 保留所有权利 | 部分搜索结果来自<a href="https://www.baidu.com" target="_blank">百度</a><br><a href="/docs/" target="_blank">文档</a> &middot; <a href="/about/" target="_blank">关于</a> &middot; <a href="https://github.com/samzhangjy/guangdu" target="_blank">GitHub</a></p>
+            <!-- <p>当前呈现版本：V</p> -->
         </footer>
     </div>
 {% endblock %}

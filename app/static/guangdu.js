@@ -10,6 +10,7 @@ function getTheme() {
   var name = "theme=";
   var decodedCookie = decodeURIComponent(document.cookie);
   var ca = decodedCookie.split(';');
+  console.log(ca)
   for (var i = 0; i < ca.length; i++) {
     var c = ca[i];
     while (c.charAt(0) == ' ') {
@@ -25,10 +26,13 @@ function getTheme() {
 function changeTheme() {
   /* Set cookies for the current theme */
   var cvalue = getTheme();
+	var minutes = 60 * 2 * 60 * 1000;
+	var exp = new Date();
+	exp.setTime(exp.getTime() + minutes + 8 * 3600 * 1000);
   if (cvalue == "light") {
-    document.cookie = "theme=dark;domain=" + document.domain;
+    document.cookie = "theme=dark;path=/;expires=" + exp.toUTCString() + ";domain=" + document.domain;
   } else {
-    document.cookie = "theme=light;domain=" + document.domain;
+    document.cookie = "theme=light;path=/;expires=" + exp.toUTCString() + ";domain=" + document.domain;
   }
 }
 

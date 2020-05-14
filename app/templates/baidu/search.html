@@ -2,7 +2,7 @@
   @Author: Sam Zhang
   @Date:   2020-04-10 20:05:53
   @Last Modified by:   Sam Zhang
-  @Last Modified time: 2020-04-14 15:32:27
+  @Last Modified time: 2020-05-06 18:09:09
 -->
 
 {% extends 'base.html' %}
@@ -12,9 +12,9 @@
 {% block top %}{% endblock %}
 
 {% block content %}
-    <nav class="navbar navbar-dark bg-primary fixed-top">
-        <a class="navbar-brand" href="/">广度搜索 <small class="text-light">百度版</small></a>
-        <form method="post" class="container-fluid" style="max-width: 60%; margin-left: 0"
+    <nav class="navbar navbar-dark bg-primary fixed-top shadow shadow-sm">
+        <a class="navbar-brand d-none d-lg-block" href="/">广度搜索 <small class="text-light">百度版</small></a>
+        <form method="post" class="container search" style="margin-left: 0"
                 action="{{ url_for('baidu.index') }}">
             <div class="input-group">
                 <input class="form-control" name="query" value="{{ keyword }}" id="search" autocomplete="off" type="search">
@@ -23,14 +23,15 @@
         </form>
         <a onclick="changeTheme()" href="" class="text-white" title="换肤"><i class="fa fa-adjust"></i></a>
     </nav>
-    <br><br><br><br>
-    <iframe id="iframe" onload="$(this).fadeIn(500); show()" seamless="seamless" src="{{ url_for('baidu.search_s', q=keyword, page=cur) }}" class="iframe"></iframe>
-    <div class="d-flex justify-content-center" id="load-container">
-        <div class="spinner-border text-primary" role="status" id="load">
-            <span class="sr-only" id="load-sr">加载中...</span>
+    <br><br><br>
+    <iframe id="iframe" class="iframe" seamless="seamless" onload="$(this).fadeIn(500); show();" src="{{ url_for('baidu.search_s', q=keyword, page=cur) }}"></iframe>
+    <div class="d-flex justify-content-center text-dark" id="load-container">
+        <div class="d-flex bg-light p-4 rounded shadow shadow-sm" id="load-sub">
+            <div class="spinner-grow text-primary" role="status" id="load">
+                <span class="sr-only" id="load-sr">加载中...</span>
+            </div>
+            <strong id="load-text" class="text-right align-text-bottom" style="margin-left: 20px;">广度正在努力加载中，请耐心等待...</strong>
         </div>
-        <!--<strong id="load-text" class="text-right" style="margin-left: 20px;">加载中...</strong>-->
-    </div>
     </div>
     <script>
         function hide() {
@@ -43,6 +44,7 @@
             $("#load-container").fadeOut(500);
             $("#load").fadeOut(500);
             $("#load-sr").fadeOut(500);
+            $("#load-sub").remove();
         }
         window.onload = hide();
     </script>

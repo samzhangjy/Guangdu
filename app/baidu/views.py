@@ -7,6 +7,7 @@
 from . import baidu
 from flask import render_template, request, redirect, url_for, abort, make_response, session
 from app.utils import baidu_search, google_search
+from urllib.parse import unquote
 
 
 @baidu.route('/', methods=['GET', 'POST'])
@@ -23,9 +24,11 @@ def index():
 @baidu.route('/s/', methods=['GET', 'POST'])
 def search():
     q = request.args.get('q')
+    if not q:
+        return redirect(url_for('main.index'))
     pn = int(request.args.get('page', 0))
     return render_template('baidu/search.html', keyword=q, cur=pn)
-    
+
 @baidu.route('/s/s/', methods=['GET', 'POST'])
 def search_s():
     q = request.args.get('q')
@@ -33,11 +36,13 @@ def search_s():
     results = baidu_search(word=str(q), pn=int(pn))
     try:
         pages = results[1]
+        pre_results = results[2]
         results = results[0]
     except IndexError:
         results = []
+        pre_results = []
         pages = 0
     pages_ = []
     for i in range(0, pages):
         pages_.append(i)
-    return render_template('baidu/search_s.html', keyword=q, results=results, pages=pages_, cur=pn)
+    return render_template('baidu/search_s.html', keyword=unquote(q, 'utf-8'), results=results, pages=pages_, cur=pn, pre_results=pre_results)
