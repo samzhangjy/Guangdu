@@ -4,9 +4,10 @@
 # @Last Modified by:   Sam Zhang
 # @Last Modified time: 2020-04-14 17:53:28
 
-from flask import render_template
+from flask import render_template, request
 from . import main
 import os
+from pytube import YouTube
 
 @main.route('/')
 def index():
@@ -19,3 +20,11 @@ def docs():
 @main.route('/about/')
 def about():
     return render_template('about.html')
+
+@main.route('/youtube/')
+def youtube():
+    id = request.args.get('id')
+    video_url = 'https://www.youtube.com/watch?v=%s' % id
+    youtube = YouTube(video_url)
+    video = youtube.streams.filter(res='720p', mime_type='video/mp4')[0]
+    return video
