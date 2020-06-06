@@ -30,5 +30,5 @@ def youtube():
     video = youtube.streams.filter(res='720p', mime_type='video/mp4')[0]
     uuid = str(uuid1()) + '.mp4'
     path = video.download(os.path.abspath('./app/static'), filename=uuid)
-    print(os.system('cd ./app/static&&ls'))
-    return send_from_directory('./app/static', uuid)
+    print(path)
+    return send_from_directory(path)
