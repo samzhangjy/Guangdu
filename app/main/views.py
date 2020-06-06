@@ -28,6 +28,6 @@ def youtube():
     video_url = 'https://www.youtube.com/watch?v=%s' % id
     youtube = YouTube(video_url)
     video = youtube.streams.filter(res='720p', mime_type='video/mp4')[0]
-    uuid = str(uuid1())
-    path = video.download('.', filename=uuid)
-    return open(path)
+    uuid = str(uuid1()) + '.mp4'
+    path = video.download('./app/static', filename=uuid)
+    return main.send_static_file(uuid)
