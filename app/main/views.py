@@ -4,7 +4,7 @@
 # @Last Modified by:   Sam Zhang
 # @Last Modified time: 2020-04-14 17:53:28
 
-from flask import render_template, request
+from flask import render_template, request, current_app
 from . import main
 import os
 from pytube import YouTube
@@ -30,4 +30,4 @@ def youtube():
     video = youtube.streams.filter(res='720p', mime_type='video/mp4')[0]
     uuid = str(uuid1()) + '.mp4'
     path = video.download('./app/static', filename=uuid)
-    return main.send_static_file(uuid)
+    return current_app.send_static_file(uuid)
