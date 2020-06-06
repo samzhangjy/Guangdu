@@ -4,7 +4,7 @@
 # @Last Modified by:   Sam Zhang
 # @Last Modified time: 2020-04-14 17:53:28
 
-from flask import render_template, request, current_app, send_from_directory
+from flask import render_template, request, current_app, send_file
 from . import main
 import os
 from pytube import YouTube
@@ -31,4 +31,4 @@ def youtube():
     uuid = str(uuid1()) + '.mp4'
     path = video.download(os.path.abspath('./app/static'), filename=uuid)
     print(path)
-    return send_from_directory(path)
+    return send_file(path)
