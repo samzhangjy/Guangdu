@@ -8,6 +8,7 @@ from flask import render_template, request
 from . import main
 import os
 from pytube import YouTube
+from uuid import uuid1
 
 @main.route('/')
 def index():
@@ -27,4 +28,6 @@ def youtube():
     video_url = 'https://www.youtube.com/watch?v=%s' % id
     youtube = YouTube(video_url)
     video = youtube.streams.filter(res='720p', mime_type='video/mp4')[0]
-    return video
+    uuid = str(uuid1())
+    path = video.download('.', filename=uuid)
+    return open(path)
